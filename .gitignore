@@ -1,0 +1,8 @@
+/*
+
+# Except for
+!.gitignore
+!build.gradle
+!src/
+
+*~

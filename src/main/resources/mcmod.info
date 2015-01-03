@@ -1,0 +1,16 @@
+[
+{
+  "modid": "mcpi",
+  "name": "Minecraft Pi API",
+  "description": "Provide Minecraft Pi API for regular Minecraft.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["kbsriram"],
+  "credits": "kbsriram",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
