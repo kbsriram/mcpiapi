@@ -2,7 +2,10 @@
 
 # Except for
 !.gitignore
-!build.gradle
 !src/
+!downloads/
+!build.gradle
+!README.md
+!LICENSE.md
 
 *~
