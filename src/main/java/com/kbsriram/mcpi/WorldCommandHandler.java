@@ -161,9 +161,15 @@ public class WorldCommandHandler
             if (KEY_IMMUTABLE.equals(key)) {
                 s_immutable = "1".equals(value);
             }
+            else if (KEY_TIME.equals(key)) {
+                // set the time in the world to the provided number.
+                long time = Long.parseLong(value);
+                ws.setWorldTime(time);
+            }
             return VOID;
         }
         public static boolean s_immutable = false;
         private final static String KEY_IMMUTABLE = "immutable";
+        private final static String KEY_TIME = "time";
     }
 }
