@@ -15,6 +15,15 @@ public class Util
     public final static int asExtTileZ(WorldInfo info, Entity e)
     { return MathHelper.floor_double(e.posZ) - info.getSpawnZ(); }
 
+    public final static double asExtTileXPos(WorldInfo info, Entity e)
+    { return e.posX - info.getSpawnX(); }
+
+    public final static double asExtTileYPos(WorldInfo info, Entity e)
+    { return e.posY - info.getSpawnY(); }
+
+    public final static double asExtTileZPos(WorldInfo info, Entity e)
+    { return e.posZ - info.getSpawnZ(); }
+
     public final static int asX(WorldInfo info, String v)
     { return info.getSpawnX() + Integer.parseInt(v); }
 

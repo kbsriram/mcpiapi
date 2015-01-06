@@ -77,6 +77,7 @@ public class EngineTickHandler
         s_handlers.put("player.getTile", new PlayerCommandHandler.GetTile());
         s_handlers.put("player.setTile", new PlayerCommandHandler.SetTile());
         s_handlers.put("player.setPos", new PlayerCommandHandler.SetPos());
+        s_handlers.put("player.getPos", new PlayerCommandHandler.GetPos());
 
         s_handlers.put("events.clear", new EventCommandHandler.Clear());
         s_handlers.put("events.block.hits", new EventCommandHandler.BlockHits());
