@@ -112,7 +112,9 @@ public class PlayerCommandHandler
         if (players.size() == 0) { return null; }
 
         // Returning the first player if none explicitly provided.
-        if ((name == null) || ("".equals(name))) {
+        // Python clients tend to have 'None' sent in place of an
+        // unspecified name, so treat that specially as well.
+        if ((name == null) || ("".equals(name)) || ("None".equals(name))) {
             return players.get(0);
         }
         for (int i=players.size() - 1; i >= 0; i--) {

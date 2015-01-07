@@ -5,6 +5,7 @@ import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartedEvent;
+import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.relauncher.Side;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.WorldServer;
@@ -17,10 +18,19 @@ public class McpiApi
     public static final String VERSION = "1.0";
     private static final int API_PORT = 4711;
 
+    @EventHandler
+    public void onServerStarting(FMLServerStartingEvent event)
+    {
+        // This exposes a command for the player to run python commands
+        // externally. Intended to be used to run mcpi client apps
+        // more conveniently.
+        event.registerServerCommand(new ExternalPythonCommand());
+    }
+
     // This strange initialization hook is because it seems that the
     // server mod isn't being called in SSP mode.
     @EventHandler
-    public void onServerLoaded(FMLServerStartedEvent event)
+    public void onServerStarted(FMLServerStartedEvent event)
     {
         if (FMLCommonHandler.instance().getEffectiveSide() != Side.SERVER) {
             return;
@@ -38,6 +48,7 @@ public class McpiApi
         // block events. Used to save data for event.* commands
         MinecraftForge.EVENT_BUS.register
             (new EventCommandHandler.BlockEventHandler());
+
 
         // Start up the server thread.
         cs.start();
