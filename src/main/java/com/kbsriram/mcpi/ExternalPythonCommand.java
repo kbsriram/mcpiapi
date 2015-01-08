@@ -25,7 +25,7 @@ final class ExternalPythonCommand
 
     @Override
     public String getCommandUsage(ICommandSender sender)
-    { return "python modname [args...]"; }
+    { return "python command [args...]"; }
 
     @Override
     public List getCommandAliases()
@@ -55,7 +55,7 @@ final class ExternalPythonCommand
         File target = new File(moddir, args[0]+".py");
 
         if (!target.canRead()) {
-            sendError(sender, "Could not find mod: `"+target+"'");
+            sendError(sender, "Could not find command: `"+target+"'");
             return;
         }
 
@@ -108,8 +108,8 @@ final class ExternalPythonCommand
     static
     {
         s_aliases = new ArrayList<String>();
-        s_aliases.add("python");
         s_aliases.add("py");
+        s_aliases.add("python");
     }
 
     // used to absorb stdout/stderr in a separate thread.

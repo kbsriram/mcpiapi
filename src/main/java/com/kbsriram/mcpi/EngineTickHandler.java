@@ -74,10 +74,18 @@ public class EngineTickHandler
 
         s_handlers.put("chat.post", new ChatCommandHandler.Post());
 
-        s_handlers.put("player.getTile", new PlayerCommandHandler.GetTile());
-        s_handlers.put("player.setTile", new PlayerCommandHandler.SetTile());
-        s_handlers.put("player.setPos", new PlayerCommandHandler.SetPos());
-        s_handlers.put("player.getPos", new PlayerCommandHandler.GetPos());
+        // aliases so we can pass in either a name or an entity id.
+        s_handlers.put("player.getTile", new PlayerCommandHandler.GetTile(false));
+        s_handlers.put("player.setTile", new PlayerCommandHandler.SetTile(false));
+        s_handlers.put("player.setPos", new PlayerCommandHandler.SetPos(false));
+        s_handlers.put("player.getPos", new PlayerCommandHandler.GetPos(false));
+        s_handlers.put("player.getRotationYaw", new PlayerCommandHandler.GetRotationYaw(false));
+
+        s_handlers.put("entity.getTile", new PlayerCommandHandler.GetTile(true));
+        s_handlers.put("entity.setTile", new PlayerCommandHandler.SetTile(true));
+        s_handlers.put("entity.setPos", new PlayerCommandHandler.SetPos(true));
+        s_handlers.put("entity.getPos", new PlayerCommandHandler.GetPos(true));
+        s_handlers.put("entity.getRotationYaw", new PlayerCommandHandler.GetRotationYaw(true));
 
         s_handlers.put("events.clear", new EventCommandHandler.Clear());
         s_handlers.put("events.block.hits", new EventCommandHandler.BlockHits());
