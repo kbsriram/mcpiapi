@@ -4,8 +4,10 @@
 !.gitignore
 !src/
 !downloads/
+!mcpimods/
 !build.gradle
 !README.md
 !LICENSE.md
 
 *~
+*.pyc

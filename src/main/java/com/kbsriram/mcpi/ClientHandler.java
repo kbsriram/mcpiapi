@@ -23,11 +23,19 @@ final class ClientHandler
         m_cli = cli;
     }
 
+    final void stopClient()
+    {
+        try { m_cli.close(); }
+        catch (Throwable ign) {}
+        try { m_rets.offer(ICommandHandler.KILL); }
+        catch (Throwable ign) {}
+    }
+
     @Override
     public void run() {
         try { handle(); }
         catch (Throwable ex) {
-            s_logger.warn("Mcpi client terminated.", ex);
+            s_logger.debug("Mcpi client terminated.", ex);
         }
         finally {
             m_running = false;
@@ -72,6 +80,9 @@ final class ClientHandler
                         m_commands.put(cmd);
                         String resp = m_rets.take();
                         s_logger.debug("Response: "+resp);
+                        if (ICommandHandler.KILL.equals(resp)) {
+                            return;
+                        }
                         if (!ICommandHandler.VOID.equals(resp)) {
                             pw.print(resp);
                             pw.print("\n");

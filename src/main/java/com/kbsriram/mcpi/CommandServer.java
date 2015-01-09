@@ -61,13 +61,27 @@ public class CommandServer
     final boolean isRunning()
     { return m_running; }
 
+    final void stopServer()
+    {
+        if (m_running && (m_socket != null)) {
+            try { m_socket.close(); }
+            catch (Throwable ign) {}
+        }
+    }
+
     @Override
     public void run()
     {
         try { _run(); }
         catch (Throwable th) {
-            s_logger.warn("Server died!", th);
+            s_logger.debug("Server stopped!", th);
             m_running = false;
+            m_socket = null;
+            for (ClientHandler ch: m_clients) {
+                try { ch.stopClient(); }
+                catch (Throwable ign) {}
+            }
+            m_clients.clear();
         }
     }
 
@@ -78,9 +92,9 @@ public class CommandServer
 
         // Simpleminded implementation - only accepts one client at a
         // time.
-        ServerSocket ss = new ServerSocket(m_port, 1);
+        m_socket = new ServerSocket(m_port, 1);
         while (true) {
-            Socket cli = ss.accept();
+            Socket cli = m_socket.accept();
             s_logger.info("New mcpi client connected: "+cli);
             ClientHandler ch = new ClientHandler
                 ("Mcpi Client Thread", this, cli);
@@ -94,6 +108,7 @@ public class CommandServer
 
     private final int m_port;
     private final Object m_client_lock = new Object();
+    private ServerSocket m_socket = null;
     private final ArrayList<ClientHandler> m_clients =
         new ArrayList<ClientHandler>();
     private int m_last_client_idx = 0;

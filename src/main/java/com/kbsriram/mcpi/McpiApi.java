@@ -6,6 +6,7 @@ import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.event.FMLServerStoppedEvent;
 import cpw.mods.fml.relauncher.Side;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.WorldServer;
@@ -37,12 +38,12 @@ public class McpiApi
         }
 
         // create server thread.
-        CommandServer cs = new CommandServer(API_PORT);
+        m_cs = new CommandServer(API_PORT);
 
         // EngineTickHandler runs on every world tick, and
         // looks for new commands to process.
         FMLCommonHandler.instance().bus().register
-            (new EngineTickHandler(cs));
+            (new EngineTickHandler(m_cs));
 
         // EventCommandHandler.BlockHandler is called on various
         // block events. Used to save data for event.* commands
@@ -51,6 +52,18 @@ public class McpiApi
 
 
         // Start up the server thread.
-        cs.start();
+        m_cs.start();
     }
+    @EventHandler
+    public void onServerStopped(FMLServerStoppedEvent event)
+    {
+        if (m_cs != null) {
+            try { m_cs.stopServer(); }
+            finally {
+                m_cs = null;
+            }
+        }
+    }
+
+    private CommandServer m_cs = null;
 }
