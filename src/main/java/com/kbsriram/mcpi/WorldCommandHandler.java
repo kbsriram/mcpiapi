@@ -1,13 +1,17 @@
 package com.kbsriram.mcpi;
 
+import java.io.ByteArrayInputStream;
 import java.util.List;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.CompressedStreamTools;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.WorldInfo;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
 
 public class WorldCommandHandler
 {
@@ -57,23 +61,57 @@ public class WorldCommandHandler
             throws Exception
         {
             String[] args = cmd.getArgs();
-            if ((args.length < 4) || (args.length > 5)) {
-                return "usage: world.setBlock(x,y,z,blockid,[blockmetadata])";
+            if ((args.length < 4) || (args.length > 6)) {
+                return "usage: world.setBlock(x,y,z,blockid,[blockmetadata,flag])";
             }
             WorldInfo info = ws.getWorldInfo();
             int x = Util.asX(info, args[0]);
             int y = Util.asY(info, args[1]);
             int z = Util.asZ(info, args[2]);
             int bid = Integer.parseInt(args[3]);
-            int flags = 3;
             int meta;
-            if (args.length == 5) {
+            if (args.length >= 5) {
                 meta = Integer.parseInt(args[4]);
             }
             else {
                 meta = 0;
             }
+            int flags;
+            if (args.length == 6) {
+                flags = Integer.parseInt(args[5]);
+            }
+            else {
+                flags = 3;
+            }
             ws.setBlock(x, y, z, Block.getBlockById(bid), meta, flags);
+            return VOID;
+        }
+    }
+
+    public final static class SetTileEntityHex
+        implements ICommandHandler
+    {
+        public String handle(Command cmd, WorldServer ws)
+            throws Exception
+        {
+            String[] args = cmd.getArgs();
+            if (args.length != 4) {
+                return "usage: world.setTileEntityHex(x,y,z,NBThex)";
+            }
+            WorldInfo info = ws.getWorldInfo();
+            int x = Util.asX(info, args[0]);
+            int y = Util.asY(info, args[1]);
+            int z = Util.asZ(info, args[2]);
+            byte hex[] = Util.hexToBytes(args[3]);
+            NBTTagCompound tag = CompressedStreamTools.readCompressed
+                (new ByteArrayInputStream(hex));
+            TileEntity te = TileEntity.createAndLoadEntity(tag);
+            if (te == null) {
+                return "no such tileentity available.";
+            }
+            ws.setTileEntity(x, y, z, te);
+            te.updateContainingBlockInfo();
+            ws.markBlockForUpdate(x, y, z);
             return VOID;
         }
     }
@@ -85,16 +123,22 @@ public class WorldCommandHandler
             throws Exception
         {
             String[] args = cmd.getArgs();
-            if ((args.length < 7) || (args.length > 8)) {
-                return "usage: world.setBlocks(x1,y1,z1,x2,y2,z2,blockid)";
+            if ((args.length < 7) || (args.length > 9)) {
+                return "usage: world.setBlocks(x1,y1,z1,x2,y2,z2,blockid[,meta,flag])";
             }
-            int flags = 3;
             int meta;
-            if (args.length == 8) {
+            if (args.length >= 8) {
                 meta = Integer.parseInt(args[7]);
             }
             else {
                 meta = 0;
+            }
+            int flags;
+            if (args.length == 9) {
+                flags = Integer.parseInt(args[8]);
+            }
+            else {
+                flags = 3;
             }
 
             WorldInfo info = ws.getWorldInfo();

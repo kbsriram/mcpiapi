@@ -39,16 +39,19 @@ If you're new to programming the Pi API - Martin O'Hanlon has a nice
 articles](http://www.stuffaboutcode.com/p/minecraft.html) that should
 get you started.
 
-To get the Pi Edition client library - download [the free Minecraft Pi
+I've included the python version of the Pi Edition client library and a few demos under the (`mcpimods/python`)[mcpimods/python] directory. It adds support for some additional commands supported by the mod - but the mod should also work against the standard Pi edition client library.
+
+To get the standard Pi Edition client library - download [the free Minecraft Pi
 Edition](https://s3.amazonaws.com/assets.minecraft.net/pi/minecraft-pi-0.1.1.tar.gz)
 and you should find java and python clients, as well as a few demos
-under the `mcpi/api` directory.
+under its `mcpi/api` directory.
 
-Not all the commands are implemented, and I've probably botched up the
-right way to do many things -- this was my first foray into writing a
-forge plugin. But I hope you find it useful and fun nevertheless.
+Not all the commands from the standard client are implemented, and
+I've probably botched up the right way to do many things -- this was
+my first foray into writing a forge plugin. But I hope you find it
+useful and fun nevertheless.
 
-Functionally, this mod is also like the [RaspberryJuice
+Functionally, this mod is similar to the [RaspberryJuice
 plugin](https://github.com/zhuowei/RaspberryJuice). However,
 RasperryJuice runs on a Bukkit server, whereas this mod runs under any
 client running Minecraft Forge.
@@ -59,18 +62,15 @@ The forge mod tries to be compatible with the extended commands
 supported by the [RaspberryJuice
 plugin](https://github.com/zhuowei/RaspberryJuice).
 
-I've added a new command `player.getRotationYaw`, which returns the
-current direction the player is facing.
-
 I've also added an in-game command `/python` which calls scripts you
-place under a directory called `mcpimods/python` under your root
+place under a directory called `mcpimods/python` in your root
 Minecraft installation.
 
-In other words, this directory sits next to your Forge `mod/`
+The `mcpimods/` directory should be next to your Forge `mod/`
 directory. For example, if (on a Mac) your Forge mod directory looks
 like `Library/Application Support/minecraft/mods/`, you would place
-your python scripts under
-`Library/Application Support/minecraft/mcpimods/python`
+your python scripts under `Library/Application
+Support/minecraft/mcpimods/python`
 
 From within the game, you simply call the name of your script (without
 the `.py` extension) and it will launch the python script as an
@@ -80,6 +80,20 @@ This is best suited for running short commands rather than something
 that runs in an infinite loop; but of course I hope you experiment and
 find interesting things.
 
-I've [bundled the python mcpi library](mcpimods/python) which adds
-support for `player.getRotationYaw`, in addition to the a small
-demo client that [clears a cuboid of blocks](mcpimods/python/clear.py).
+I've [bundled the python mcpi library](mcpimods/python) which has a
+small demo client that [clears a cuboid of
+blocks](mcpimods/python/clear.py). You should also be able to copy the
+[`mcpimods`](mcpimods) directory to the root of your minecraft
+installation and start using the `/python` in-game command from the
+mod.
+
+I've added an experimental command
+`world.setTileEntityHex(x,y,z,hex)`, which takes an `x,y,z` position
+relative to the spawn point, and an ASCII hex string representing a
+tile entity in (NBT format)[http://wiki.vg/NBT]. The main purpose
+was to have some (weak) support for importing schematic files, and you
+can see (an experimental script)[mcpimods/python/load.py) that tries to
+load schematic files. It doesn't always do the right thing, but it's good enough to have some fun creating structures from (schematic files)[http://minecraft.gamepedia.com/Schematic_file_format]
+
+Reading an (autofarm schematic)[http://www.minecraft-schematics.com/schematic/934/] via the in-game `/python` command.
+![Reading a schematic](../master/downloads/load_mod.gif?raw=true)

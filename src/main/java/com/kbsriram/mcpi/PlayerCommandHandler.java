@@ -2,6 +2,7 @@ package com.kbsriram.mcpi;
 
 import java.util.List;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.WorldInfo;
 
@@ -107,10 +108,10 @@ public class PlayerCommandHandler
         }
     }
 
-    public final static class GetRotationYaw
+    public final static class GetRotation
         extends ABaseCommandHandler
     {
-        public GetRotationYaw(boolean v)
+        public GetRotation(boolean v)
         { super(v); }
 
         public String handle(Command cmd, WorldServer ws)
@@ -118,12 +119,60 @@ public class PlayerCommandHandler
         {
             String[] args = cmd.getArgs();
             if (args.length != 1) {
-                return "Usage: player.getRotationYaw([playername])";
+                return "Usage: player.getRotation([playername])";
             }
             EntityPlayerMP host = getPlayer(ws, args[0]);
             if (host != null) {
-                WorldInfo info = ws.getWorldInfo();
                 return String.valueOf(host.rotationYaw);
+            }
+            else {
+                return "No such player";
+            }
+        }
+    }
+
+    public final static class GetPitch
+        extends ABaseCommandHandler
+    {
+        public GetPitch(boolean v)
+        { super(v); }
+
+        public String handle(Command cmd, WorldServer ws)
+            throws Exception
+        {
+            String[] args = cmd.getArgs();
+            if (args.length != 1) {
+                return "Usage: player.getPitch([playername])";
+            }
+            EntityPlayerMP host = getPlayer(ws, args[0]);
+            if (host != null) {
+                return String.valueOf(host.rotationPitch);
+            }
+            else {
+                return "No such player";
+            }
+        }
+    }
+
+    public final static class GetDirection
+        extends ABaseCommandHandler
+    {
+        public GetDirection(boolean v)
+        { super(v); }
+
+        public String handle(Command cmd, WorldServer ws)
+            throws Exception
+        {
+            String[] args = cmd.getArgs();
+            if (args.length != 1) {
+                return "Usage: player.getDirection([playername])";
+            }
+            EntityPlayerMP host = getPlayer(ws, args[0]);
+            if (host != null) {
+                Vec3 dir = host.getLookVec();
+                return String.valueOf(dir.xCoord)+","+
+                    String.valueOf(dir.yCoord)+","+
+                    String.valueOf(dir.zCoord);
             }
             else {
                 return "No such player";

@@ -31,8 +31,8 @@ class Connection:
     def send(self, f, *data):
         """Sends data. Note that a trailing newline '\n' is added here"""
         s = "%s(%s)\n"%(f, flatten_parameters_to_string(data))
-        #print "f,data:",f,data
-        #print "s",s
+        # print "f,data:",f,data
+        # print "s",s
         self.drain()
         self.lastSent = s
         self.socket.sendall(s)
@@ -42,6 +42,7 @@ class Connection:
         s = self.socket.makefile("r").readline().rstrip("\n")
         if s == Connection.RequestFailed:
             raise RequestError("%s failed"%self.lastSent.strip())
+        # print "rec", s
         return s
 
     def sendReceive(self, *data):

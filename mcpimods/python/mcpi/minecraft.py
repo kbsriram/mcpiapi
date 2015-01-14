@@ -16,11 +16,14 @@ from util import flatten
      entityId, by injecting [] that flattens to nothing)
 
     @author: Aron Nieminen, Mojang AB
-
+    
     Updated to included additional functionality provided by RaspberryJuice:
     - getBlocks() : implemented
     - .create() : can now accept "name" (player name) for use in multiplayer
-
+    - CmdPositioner.getDirection
+    - CmdPositioner.getPitch
+    - CmdPositioner.getRotation
+    - getPlayerEntityId
     """
 
 
@@ -51,9 +54,18 @@ class CmdPositioner:
         """Set entity tile position (entityId:int) => Vec3"""
         self.conn.send(self.pkg + ".setTile", id, intFloor(*args))
 
-    def getRotationYaw(self, id):
-        """Get entity rotation yaw (entityId:int) => float"""
-        return float(self.conn.sendReceive(self.pkg + ".getRotationYaw", id))
+    def getDirection(self, id):
+        """Get entity direction (entityId:int) => Vec3"""
+        s = self.conn.sendReceive(self.pkg + ".getDirection", id)
+        return Vec3(*map(float, s.split(",")))
+
+    def getRotation(self, id):
+        """get entity rotation (entityId:int) => float"""
+        return float(self.conn.sendReceive(self.pkg + ".getRotation", id))
+
+    def getPitch(self, id):
+        """get entity pitch (entityId:int) => float"""
+        return float(self.conn.sendReceive(self.pkg + ".getPitch", id))
 
     def setting(self, setting, status):
         """Set a player setting (setting, status). keys: autojump"""
@@ -81,8 +93,12 @@ class CmdPlayer(CmdPositioner):
         return CmdPositioner.getTilePos(self, self.name)
     def setTilePos(self, *args):
         return CmdPositioner.setTilePos(self, self.name, args)
-    def getRotationYaw(self, *args):
-        return CmdPositioner.getRotationYaw(self, self.name)
+    def getDirection(self):
+        return CmdPositioner.getDirection(self, self.name)
+    def getRotation(self):
+        return CmdPositioner.getRotation(self, self.name)
+    def getPitch(self):
+        return CmdPositioner.getPitch(self, self.name)
 
 class CmdCamera:
     def __init__(self, connection):
@@ -163,6 +179,10 @@ class Minecraft:
         """Get the entity ids of the connected players => [id:int]"""
         ids = self.conn.sendReceive("world.getPlayerIds")
         return map(int, ids.split("|"))
+
+    def getPlayerEntityId(self, name):
+        """Get the entity id of the named player => [id:int]"""
+        return int(self.conn.sendReceive("world.getPlayerId", name))
 
     def saveCheckpoint(self):
         """Save a checkpoint that can be used for restoring the world"""

@@ -41,4 +41,26 @@ public class Util
 
     public final static double asDoubleZ(WorldInfo info, String v)
     { return info.getSpawnZ() + Double.parseDouble(v); }
+
+    public final static byte[] hexToBytes(String in)
+    {
+        char[] inc = in.toCharArray();
+        int len = inc.length;
+        byte[] ret = new byte[len/2];
+        int idx = 0;
+        int ridx = 0;
+        while (idx < len) {
+            int v = hexCharToInt(inc[idx++])*16;
+            v += hexCharToInt(inc[idx++]);
+            ret[ridx++] = (byte) v;
+        }
+        return ret;
+    }
+
+    private final static int hexCharToInt(char c)
+    {
+        c = Character.toLowerCase(c);
+        if (c <= '9') { return c - '0'; }
+        else { return c - 'a' + 10; }
+    }
 }

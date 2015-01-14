@@ -67,6 +67,7 @@ public class EngineTickHandler
     {
         s_handlers.put("world.setBlock", new WorldCommandHandler.SetBlock());
         s_handlers.put("world.setBlocks", new WorldCommandHandler.SetBlocks());
+        s_handlers.put("world.setTileEntityHex", new WorldCommandHandler.SetTileEntityHex());
         s_handlers.put("world.getHeight", new WorldCommandHandler.GetHeight());
         s_handlers.put("world.getBlock", new WorldCommandHandler.GetBlock());
         s_handlers.put("world.getPlayerIds", new WorldCommandHandler.GetPlayerIds());
@@ -79,13 +80,17 @@ public class EngineTickHandler
         s_handlers.put("player.setTile", new PlayerCommandHandler.SetTile(false));
         s_handlers.put("player.setPos", new PlayerCommandHandler.SetPos(false));
         s_handlers.put("player.getPos", new PlayerCommandHandler.GetPos(false));
-        s_handlers.put("player.getRotationYaw", new PlayerCommandHandler.GetRotationYaw(false));
+        s_handlers.put("player.getRotation", new PlayerCommandHandler.GetRotation(false));
+        s_handlers.put("player.getPitch", new PlayerCommandHandler.GetPitch(false));
+        s_handlers.put("player.getDirection", new PlayerCommandHandler.GetDirection(false));
 
         s_handlers.put("entity.getTile", new PlayerCommandHandler.GetTile(true));
         s_handlers.put("entity.setTile", new PlayerCommandHandler.SetTile(true));
         s_handlers.put("entity.setPos", new PlayerCommandHandler.SetPos(true));
         s_handlers.put("entity.getPos", new PlayerCommandHandler.GetPos(true));
-        s_handlers.put("entity.getRotationYaw", new PlayerCommandHandler.GetRotationYaw(true));
+        s_handlers.put("entity.getRotation", new PlayerCommandHandler.GetRotation(true));
+        s_handlers.put("entity.getPitch", new PlayerCommandHandler.GetPitch(true));
+        s_handlers.put("entity.getDirection", new PlayerCommandHandler.GetDirection(true));
 
         s_handlers.put("events.clear", new EventCommandHandler.Clear());
         s_handlers.put("events.block.hits", new EventCommandHandler.BlockHits());

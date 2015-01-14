@@ -4,6 +4,11 @@ import mcpi.vec3 as vec3
 import sys
 
 def asCardinalDirection(yaw):
+    while yaw < 0:
+        yaw = yaw + 360
+    while yaw > 360:
+        yaw = yaw - 360
+
     if (yaw < 45) or (yaw > 315):
         return 0 # South
     elif yaw < 135:
@@ -27,18 +32,11 @@ except ValueError:
 
 ppos = mc.player.getTilePos()
 
-# Where is the player looking
-yaw = mc.player.getRotationYaw()
+# Where is the player looking (to the closest cardinal direction)
+direction = asCardinalDirection(mc.player.getRotation())
+print "direction", direction
 
-while yaw < 0:
-    yaw = yaw + 360
-
-while yaw > 360:
-    yaw = yaw - 360
-
-# Convert to closest cardinal directions, and update x/z suitably.
-direction = asCardinalDirection(yaw)
-
+# and update x/z suitably.
 if direction == 0:
     sx,ex,sz,ez = -x/2,x/2,0,z
 elif direction == 1:
