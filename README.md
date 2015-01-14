@@ -39,7 +39,7 @@ If you're new to programming the Pi API - Martin O'Hanlon has a nice
 articles](http://www.stuffaboutcode.com/p/minecraft.html) that should
 get you started.
 
-I've included the python version of the Pi Edition client library and a few demos under the (`mcpimods/python`)[mcpimods/python] directory. It adds support for some additional commands supported by the mod - but the mod should also work against the standard Pi edition client library.
+I've included the python version of the Pi Edition client library and a few demos under the [`mcpimods/python`](mcpimods/python) directory. It adds support for some additional commands supported by the mod - but the mod should also work against the standard Pi edition client library.
 
 To get the standard Pi Edition client library - download [the free Minecraft Pi
 Edition](https://s3.amazonaws.com/assets.minecraft.net/pi/minecraft-pi-0.1.1.tar.gz)
@@ -90,10 +90,10 @@ mod.
 I've added an experimental command
 `world.setTileEntityHex(x,y,z,hex)`, which takes an `x,y,z` position
 relative to the spawn point, and an ASCII hex string representing a
-tile entity in (NBT format)[http://wiki.vg/NBT]. The main purpose
+tile entity in [NBT format](http://wiki.vg/NBT). The main purpose
 was to have some (weak) support for importing schematic files, and you
-can see (an experimental script)[mcpimods/python/load.py) that tries to
-load schematic files. It doesn't always do the right thing, but it's good enough to have some fun creating structures from (schematic files)[http://minecraft.gamepedia.com/Schematic_file_format]
+can see [an experimental script](mcpimods/python/load.py) that tries to
+load schematic files. It doesn't always do the right thing, but it's good enough to have some fun creating structures from [schematic files](http://minecraft.gamepedia.com/Schematic_file_format)
 
-Reading an (autofarm schematic)[http://www.minecraft-schematics.com/schematic/934/] via the in-game `/python` command.
+Reading an [autofarm schematic](http://www.minecraft-schematics.com/schematic/934/) via the in-game `/python` command.
 ![Reading a schematic](../master/downloads/load_mod.gif?raw=true)
