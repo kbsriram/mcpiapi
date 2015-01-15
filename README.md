@@ -87,7 +87,8 @@ blocks](mcpimods/python/clear.py). You should also be able to copy the
 installation and start using the `/python` in-game command from the
 mod.
 
-I've added an experimental command
+I've added some experimental commands:
+
 `world.setTileEntityHex(x,y,z,hex)`, which takes an `x,y,z` position
 relative to the spawn point, and an ASCII hex string representing a
 tile entity in [NBT format](http://wiki.vg/NBT). The main purpose
@@ -97,3 +98,15 @@ load schematic files. It doesn't always do the right thing, but it's good enough
 
 Reading an [autofarm schematic](http://www.minecraft-schematics.com/schematic/934/) via the in-game `/python` command.
 ![Reading a schematic](../master/downloads/load_mod.gif?raw=true)
+
+
+`events.block.wait.hit()` waits until a block is hit, and returns the
+`x,y,z` position of the block. This can be useful to avoid busy wait
+loops from your code.
+
+`events.entity.wait.movedTile()` waits until a player has moved
+their tile position, and reports a `,` separated string like
+`entityid,x,y,z`. The `x,y,z` position is the current tile position of
+the player with `entityid`. This too is handy to avoid busy wait loops
+in your code. Check out [this example](mcpimods/python/follow.py) for
+a hello world type script for how to use this command.

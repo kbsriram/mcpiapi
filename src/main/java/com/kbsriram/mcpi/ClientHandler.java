@@ -78,8 +78,11 @@ final class ClientHandler
                     try {
                         s_logger.debug("Waiting for: "+cmd);
                         m_commands.put(cmd);
-                        String resp = m_rets.take();
-                        s_logger.debug("Response: "+resp);
+                        String resp;
+                        do {
+                            resp = m_rets.take();
+                            s_logger.debug("Response: "+resp);
+                        } while (ICommandHandler.PAUSE.equals(resp));
                         if (ICommandHandler.KILL.equals(resp)) {
                             return;
                         }

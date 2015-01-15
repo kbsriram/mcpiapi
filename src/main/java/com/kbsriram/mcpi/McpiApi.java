@@ -45,6 +45,12 @@ public class McpiApi
         FMLCommonHandler.instance().bus().register
             (new EngineTickHandler(m_cs));
 
+        // PlayerTickHandler runs on every player tick, and
+        // handles any pending player move events.
+        FMLCommonHandler.instance().bus().register
+            (new EventCommandHandler.PlayerEventHandler());
+
+
         // EventCommandHandler.BlockHandler is called on various
         // block events. Used to save data for event.* commands
         MinecraftForge.EVENT_BUS.register

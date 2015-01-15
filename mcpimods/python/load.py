@@ -115,10 +115,13 @@ if len(blocks) != w*h*l:
     exit(0)
 
 pos = mc.player.getTilePos()
+px = pos.x + 1
+pz = pos.z + 1
+py = mc.getHeight(px, pz)
 
 mc.postToChat('Need to build ' + str(l) + ' levels');
 
-mc.setBlocks(pos.x, pos.y, pos.z, pos.x+w, pos.y+h, pos.z+l, block.AIR.id)
+mc.setBlocks(px, py, pz, px+w, py+h, pz+l, block.AIR.id)
 
 opt = Optimizer(mc)
 
@@ -135,8 +138,8 @@ for y in range(0, h):
                 opt.flush()
                 continue
             datum = data[idx]
-            #mc.setBlock(pos.x+x,pos.y+y,pos.z+z,blockid,datum)
-            opt.push(pos.x+x,pos.y+y,pos.z+z,blockid,datum)
+            #mc.setBlock(px+x,py+y,pz+z,blockid,datum)
+            opt.push(px+x,py+y,pz+z,blockid,datum)
 
 for y in range(0, h):
     mc.postToChat('Level '+str(y))
@@ -152,8 +155,8 @@ for y in range(0, h):
                 continue
             idx = (y*l + z)*w +x
             datum = data[idx]
-            #mc.setBlock(pos.x+x,pos.y+y,pos.z+z,blockid,datum)
-            opt.push(pos.x+x,pos.y+y,pos.z+z,blockid,datum)
+            #mc.setBlock(px+x,py+y,pz+z,blockid,datum)
+            opt.push(px+x,py+y,pz+z,blockid,datum)
 
 opt.flush()
 
@@ -162,14 +165,13 @@ if ntileentities > 0:
     mc.postToChat('Updating '+str(ntileentities)+' blocks')
 
 for tileentity in tileentities:
-    nx = pos.x + tileentity['x'].value
-    ny = pos.y + tileentity['y'].value
-    nz = pos.z + tileentity['z'].value
+    nx = px + tileentity['x'].value
+    ny = py + tileentity['y'].value
+    nz = pz + tileentity['z'].value
     tileentity['x'].value = nx
     tileentity['y'].value = ny
     tileentity['z'].value = nz
     hex = nbt2hex(tileentity)
-    mc.conn.send('world.setTileEntity', nx, ny, nz, hex)
-    # print "Update ",tileentity, " at ", nx, ny, nz
+    mc.conn.send('world.setTileEntityHex', nx, ny, nz, hex)
 
 mc.postToChat('All done')

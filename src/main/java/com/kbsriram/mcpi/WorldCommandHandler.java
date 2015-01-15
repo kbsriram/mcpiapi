@@ -105,6 +105,9 @@ public class WorldCommandHandler
             byte hex[] = Util.hexToBytes(args[3]);
             NBTTagCompound tag = CompressedStreamTools.readCompressed
                 (new ByteArrayInputStream(hex));
+            tag.setInteger("x", x);
+            tag.setInteger("y", y);
+            tag.setInteger("z", z);
             TileEntity te = TileEntity.createAndLoadEntity(tag);
             if (te == null) {
                 return "no such tileentity available.";

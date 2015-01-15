@@ -17,6 +17,19 @@ public class EngineTickHandler
     public EngineTickHandler(CommandServer cs)
     { m_cs = cs; }
 
+    public final static WorldServer getWorldServer()
+    {
+        final MinecraftServer ms = MinecraftServer.getServer();
+        if (ms == null) {
+            return null;
+        }
+        final WorldServer ws[] = ms.worldServers;
+        if ((ws.length == 0) || ws[0].isRemote) {
+            return null;
+        }
+        return ws[0];
+    }
+
     @SubscribeEvent
     public void onWorldTick(WorldTickEvent e)
     {
@@ -26,15 +39,10 @@ public class EngineTickHandler
             (e.phase != Phase.END)) {
             return;
         }
-        final MinecraftServer ms = MinecraftServer.getServer();
-        if (ms == null) {
+        final WorldServer ws = getWorldServer();
+        if (ws == null) {
             return;
         }
-        final WorldServer ws[] = ms.worldServers;
-        if ((ws.length == 0) || ws[0].isRemote) {
-            return;
-        }
-
         if (!m_cs.isRunning()) {
             m_cs = null;
             return;
@@ -49,7 +57,7 @@ public class EngineTickHandler
             return;
         }
 
-        try { resp(cmd, handler.handle(cmd, ws[0])); }
+        try { resp(cmd, handler.handle(cmd, ws)); }
         catch (Exception ex) {
             s_logger.warn("Handler failed.", ex);
             resp(cmd, ex.getMessage());
@@ -94,6 +102,8 @@ public class EngineTickHandler
 
         s_handlers.put("events.clear", new EventCommandHandler.Clear());
         s_handlers.put("events.block.hits", new EventCommandHandler.BlockHits());
+        s_handlers.put("events.block.wait.hit", new EventCommandHandler.BlockWaitHit());
+        s_handlers.put("events.entity.wait.movedTile", new EventCommandHandler.PlayerWaitMovedTile());
 
         s_handlers.put("camera.mode.setNormal", new CameraCommandHandler.ModeSetNormal());
         s_handlers.put("camera.mode.setFollow", new CameraCommandHandler.ModeSetFollow());
