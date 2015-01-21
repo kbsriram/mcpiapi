@@ -110,3 +110,9 @@ their tile position, and reports a `,` separated string like
 the player with `entityid`. This too is handy to avoid busy wait loops
 in your code. Check out [this example](mcpimods/python/follow.py) for
 a hello world type script for how to use this command.
+
+`events.setting(key,value)` to configure events. Currently, just one
+key is available -- `restrict_to_sword` and it takes `0` or `1` as its
+boolean value. `events.setting(restrict_to_sword,0)` will remove the
+(default) check that reports block hit events only when the player is
+also holding a sword.

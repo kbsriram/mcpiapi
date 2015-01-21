@@ -104,6 +104,7 @@ public class EngineTickHandler
         s_handlers.put("events.block.hits", new EventCommandHandler.BlockHits());
         s_handlers.put("events.block.wait.hit", new EventCommandHandler.BlockWaitHit());
         s_handlers.put("events.entity.wait.movedTile", new EventCommandHandler.PlayerWaitMovedTile());
+        s_handlers.put("events.setting", new EventCommandHandler.Setting());
 
         s_handlers.put("camera.mode.setNormal", new CameraCommandHandler.ModeSetNormal());
         s_handlers.put("camera.mode.setFollow", new CameraCommandHandler.ModeSetFollow());

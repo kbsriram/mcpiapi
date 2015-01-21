@@ -4,7 +4,10 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.relauncher.Side;
 import java.util.List;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.WorldServer;
@@ -94,7 +97,11 @@ public class EventCommandHandler
         @SubscribeEvent
         public void onPlayerInteractEvent(PlayerInteractEvent e)
         {
-            if (e.action == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK) {
+            // Considered to be a block hit iff this is a left-click, and
+            // (settings is not in restricted-mode or
+            //  settings is in restricted-mode and player is holding a sword)
+            if ((e.action == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK) &&
+                isValidBlockHit(e.entityPlayer)) {
                 HitData hd = new HitData
                     (e.x, e.y, e.z, e.face, e.entityPlayer.getEntityId());
                 BlockEventHandler.set(hd);
@@ -128,6 +135,40 @@ public class EventCommandHandler
 
         private static HitData s_last_block_hit = null;
         private static Command s_pending_command = null;
+    }
+
+    private final static boolean isValidBlockHit(EntityPlayer p)
+    {
+        // Unless the world is in restricted hit mode, return true.
+        if (!Setting.s_restrict_held_item_for_hit) {
+            return true;
+        }
+        ItemStack is = p.getHeldItem();
+        if (is == null) {
+            return false;
+        }
+        return (is.getItem() instanceof ItemSword);
+    }
+
+    public final static class Setting
+        implements ICommandHandler
+    {
+        public String handle(Command cmd, WorldServer ws)
+            throws Exception
+        {
+            if (cmd.getArgs().length != 2) {
+                return "usage: events.setting(key,value)";
+            }
+            String key = cmd.getArgs()[0].trim();
+            String value = cmd.getArgs()[1].trim();
+
+            if (KEY_RESTRICT_TO_SWORD.equals(key)) {
+                s_restrict_held_item_for_hit = "1".equals(value);
+            }
+            return VOID;
+        }
+        public static boolean s_restrict_held_item_for_hit = true;
+        private final static String KEY_RESTRICT_TO_SWORD = "restrict_to_sword";
     }
 
     public final static class PlayerEventHandler
